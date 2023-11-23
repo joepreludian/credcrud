@@ -4,12 +4,13 @@ version = "0.1.0"
 description = "Credit Card Crud Microservice"
 authors = ["Jonhnatha Trigueiro <joepreludian@gmail.com>"]
 license = "Private"
-readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
 fastapi = "^0.104.1"
 uvicorn = {extras = ["standard"], version = "^0.24.0.post1"}
+alembic = "^1.12.1"
+python-creditcard = {git = "https://github.com/MaisTodos/python-creditcard.git"}
 
 
 [build-system]
