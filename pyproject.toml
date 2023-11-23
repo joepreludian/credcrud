@@ -12,6 +12,16 @@ uvicorn = {extras = ["standard"], version = "^0.24.0.post1"}
 alembic = "^1.12.1"
 python-creditcard = {git = "https://github.com/MaisTodos/python-creditcard.git"}
 
+httpx = {version = "^0.25.1", optional = true}
+pytest = {version = "^7.4.3", optional = true}
+pytest-cov = {version = "^4.1.0", optional = true}
+
+[tool.poetry.extras]
+
+# Using the optional approach will let me to install via pip extra syntax: e.g. "pip install .[testing]"
+testing = ["httpx", "pytest", "pytest-cov"]
+
+[tool.poetry.group.dev.dependencies]
 
 [build-system]
 requires = ["poetry-core"]
