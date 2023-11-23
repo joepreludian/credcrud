@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: .
+    command: uvicorn credcrud.main:app --host 0.0.0.0 --port 8765 --reload
+    image: "credcrud:latest"
+    ports:
+      - "8765:8765"
+    volumes:
+      - ./:/app
