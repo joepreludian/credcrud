@@ -13,7 +13,7 @@ Este projeto será montado apenas para fins de estudo. O mesmo trabalhará em ci
 # 🛠️ Estratégia de trabalho
 Para o desafio acima proposto, será adotado o microframework FastAPI e como persistencia de dados será utilizado SQLAlchemy com Alembic. Como possuo pouco tempo disponível para o projeto, tentarei fazer tradeoffs de modo a não ter prejuízo no desenvolvimento.
 
-Criarei um arquivo de log onde eu tentarei descrever o conjunto de ações tomadas de modo a chegar no objetivo final.
+Criei [um arquivo de log](CHANGELOG.md) onde eu descreverei o conjunto de ações tomadas de modo a chegar no objetivo final.
 
 **Observação**: Caso seja necessário eu avaliarei se manterei essa estratégia. Caso haja modificação do plano, eu irei documentando aqui prontamente, assim como explicando o motivo para tal ação.
 
