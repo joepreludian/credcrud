@@ -1,32 +1,11 @@
-import uuid
-
-import pytest
-from credcrud.card.schemas import Card as CardSchema
 from credcrud.card.models import Card
 from credcrud.card.repositories import CardRepository
 from tests.builders import test_db_session
 
-from datetime import datetime, timedelta
-
-
-
-
-@pytest.fixture()
-def build_card_data():
-    def _builder(**kwargs):
-        return {
-            "card_number": "0000111122223333",
-            "card_holder": "Jonhnatha Trigueiro",
-            "expiration_date": datetime.now().date() + timedelta(days=5),
-            "cvv": "1234",
-            **kwargs
-        }
-
-    return _builder
 
 class TestCardRepository:
-    def test_create_card(self, build_card):
-        card_data = build_card(card_holder="Jessica Ribeiro")
+    def test_create_card(self, build_card_data):
+        card_data = build_card_data(card_holder="Jessica Ribeiro")
 
         cr = CardRepository(test_db_session)
         created_card = cr.create(
@@ -44,8 +23,8 @@ class TestCardRepository:
         assert created_card.expiration_date == card_data["expiration_date"]
         assert created_card.cvv == card_data["cvv"]
 
-    def test_fetch_card(self, build_card):
-        card_data = build_card(card_number="1000111122223333")
+    def test_fetch_card(self, build_card_data):
+        card_data = build_card_data(card_number="1000111122223333")
 
         cr = CardRepository(test_db_session)
         created_card = cr.create(

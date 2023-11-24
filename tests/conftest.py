@@ -1,3 +1,6 @@
+from datetime import datetime, timedelta
+from credcrud.card.schemas import CardPayload
+
 import pytest
 import psycopg2
 from sqlalchemy import create_engine
@@ -33,3 +36,31 @@ def setup_test_database():
     finally:
         cursor.close()
         conn.close()
+
+
+@pytest.fixture()
+def build_card_data():
+    def _builder(**kwargs):
+        return {
+            "card_number": "0000111122223333",
+            "card_holder": "Jonhnatha Trigueiro",
+            "exp_date": "02/2026",
+            "expiration_date": datetime.now().date() + timedelta(days=5),
+            "cvv": "1234",
+            **kwargs
+        }
+
+    return _builder
+
+@pytest.fixture()
+def build_card_payload():
+    def _builder(**kwargs):
+        return CardPayload(**{
+            "number": "0000111122223333",
+            "holder": "Jonhnatha Trigueiro",
+            "exp_date": "02/2026",
+            "cvv": "1234",
+            **kwargs
+        })
+
+    return _builder
