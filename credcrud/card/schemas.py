@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 
 
 class Card(BaseModel):
-    # id - validate if it going to work
     card_holder: str = Field(min_length=CardConstants.HOLDER_MIN_SIZE,
                              max_length=CardConstants.HOLDER_MAX_SIZE)
 
