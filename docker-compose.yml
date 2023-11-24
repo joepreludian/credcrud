@@ -1,12 +1,25 @@
 version: "3.9"
 
 services:
+  database:
+    image: docker.io/postgres:16-alpine3.18
+    ports:
+      - "15432:5432"
+    env_file:
+      - .env.dev
+    volumes:
+      - database_data:/var/lib/postgresql/data
   app:
     build:
       context: .
     command: uvicorn credcrud.main:app --host 0.0.0.0 --port 8765 --reload
     image: "credcrud:latest"
+    env_file:
+      - .env.dev
     ports:
       - "8765:8765"
     volumes:
       - ./:/app
+
+volumes:
+  database_data:
