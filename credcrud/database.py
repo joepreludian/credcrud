@@ -14,7 +14,7 @@ Engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autoflush=False, bind=Engine, autocommit=False)
 
 @contextmanager
-def database_session():
+def db_session():
     db = SessionLocal()
     try:
         yield db
