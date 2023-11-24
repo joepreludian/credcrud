@@ -7,7 +7,7 @@ from contextlib import contextmanager
 
 
 @contextmanager
-def handle_test_database():
+def test_db_session():
     db_name = f"{DATABASE_NAME}_test"
 
     def _connect():
@@ -17,6 +17,7 @@ def handle_test_database():
 
         return superuser_conn, superuser_cursor
 
+    # Create Test Database
     conn, cursor = _connect()
     try:
         cursor.execute(f"DROP DATABASE IF EXISTS {db_name}")
@@ -25,27 +26,23 @@ def handle_test_database():
         cursor.close()
         conn.close()
 
-    yield
+    # Initialize engine
+    engine = create_engine(f"{DATABASE_URL}_test")
 
+    Base.metadata.create_all(bind=engine)
+
+    Session = sessionmaker(bind=engine)
+    session = Session()
+
+    yield session
+
+    session.close()
+    engine.dispose()
+
+    # Teardown and cleanup test database
     conn, cursor = _connect()
     try:
         cursor.execute(f"DROP DATABASE {db_name}")
     finally:
         cursor.close()
         conn.close()
-
-
-@pytest.fixture(scope="function")
-def db_session():
-    with handle_test_database():
-        engine = create_engine(f"{DATABASE_URL}_test")
-
-        Base.metadata.create_all(bind=engine)
-
-        Session = sessionmaker(bind=engine)
-        session = Session()
-
-        yield session
-
-        session.close()
-        engine.dispose()
