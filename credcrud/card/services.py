@@ -1,13 +1,7 @@
 from credcrud.card.schemas import Card as CardSchema
 from credcrud.card.models import Card
-from credcrud.database import use_db
+from credcrud.database import database_session
 
-class CardService:
-    def __init__(self, card: CardSchema = None):
-        self._card = card
 
-    def persist_to_database(self) -> str:
-        pass
-
-    def get_from_database(self, uuid: str) -> CardSchema:
-        pass
+class CardService:  # @todo rethink this.
+    ...
