@@ -19,3 +19,7 @@ class CardRepository:
     def get_by_id(self, id: str) -> Card:
         with self._db_session() as db:
             return db.query(Card).filter(Card.id == id).first()
+
+    def get_all(self) -> list[Card]:
+        with self._db_session() as db:
+            return db.query(Card).all()

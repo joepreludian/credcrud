@@ -42,3 +42,11 @@ class TestCardRepository:
 
         for attribute in ("card_number", "card_holder", "expiration_date", "cvv", "id"):
             assert getattr(retrieved_card, attribute) == getattr(created_card, attribute)
+
+    def test_get_all_cards(self):
+        cr = CardRepository(test_db_session)
+        all_items = cr.get_all()
+
+        assert type(all_items) is list
+        assert len(all_items) > 0
+        assert type(all_items[0]) is Card
