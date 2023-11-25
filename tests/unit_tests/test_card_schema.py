@@ -31,8 +31,9 @@ class TestCardSchema:
     @pytest.mark.parametrize(
         ("override", "error_message"),
         (
-            ({'number': '1234'}, "Card number must have 16 digits"),
-            ({'number': '1234abc'}, "Card number must have only numbers"),
+            ({'number': '1234'}, "String should have at least 15 characters"),
+            ({'number': '123456781234abcd'}, "Card number must have only numbers"),
+            ({'number': '1111111111111111'}, "Card number provided is invalid"),
             ({'exp_date': '01/12/1993'}, "Card exp_date must be on mm/YYYY format"),
             ({'cvv': '1abc'}, "CVV must be a number with 3 up to 4 digits"),
         )
@@ -44,8 +45,18 @@ class TestCardSchema:
 
         assert error_message in str(exception_raised)
 
-    def test_payload_to_representation(self, build_card_payload):
-        payload = build_card_payload()
+    @pytest.mark.parametrize(
+        ("card_number", "brand"),
+        (
+                ("5425233430109903", "master"),
+                ("4263982640269299", "visa"),
+                ("6011000991300009", "discover"),
+                ("374245455400126", "amex"),
+                ("0000000000000000", None)
+        )
+    )
+    def test_payload_to_representation(self, card_number, brand, build_card_payload):
+        payload = build_card_payload(**{"number": card_number})
         card = Card.from_payload(payload)
 
         output = card.to_representation()
@@ -53,3 +64,4 @@ class TestCardSchema:
         assert type(output) is CardPayload
         assert output.number == f"************{payload.number[12:]}"
         assert output.exp_date == payload.exp_date
+        assert output.brand == brand

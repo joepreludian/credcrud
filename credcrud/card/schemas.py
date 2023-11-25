@@ -4,6 +4,8 @@ from credcrud.card.models import Card as CardModel
 from credcrud.card.utils import standardize_expire_date, format_standard_date_to_expire_date
 from datetime import datetime, timedelta
 from typing import Optional
+from creditcard import CreditCard
+from creditcard.exceptions import BrandNotFound
 
 class CardPayload(BaseModel):
     exp_date: str
@@ -12,12 +14,14 @@ class CardPayload(BaseModel):
     cvv: str
 
     id: Optional[str] = None
+    brand: Optional[str] = None
 
 class Card(BaseModel):
     card_holder: str = Field(min_length=CardConstants.HOLDER_MIN_SIZE,
                              max_length=CardConstants.HOLDER_MAX_SIZE)
 
-    card_number: str
+    card_number: str = Field(min_length=CardConstants.CARD_NUMBER_MIN_SIZE,
+                             max_length=CardConstants.CARD_NUMBER_MAX_SIZE)
     expiration_date: str
     cvv: str = Field(min_length=CardConstants.CVV_MIN_SIZE,
                 max_length=CardConstants.CVV_MAX_SIZE)
@@ -31,8 +35,9 @@ class Card(BaseModel):
         except ValueError as exception:
             raise ValueError("Card number must have only numbers") from exception
 
-        if (len(self.card_number) != CardConstants.CARD_NUMBER_SIZE):
-            raise ValueError("Card number must have 16 digits")
+        card_number = CreditCard(self.card_number)
+        if not card_number.is_valid():
+            raise ValueError("Card number provided is invalid")
 
         try:
             self.expiration_date = standardize_expire_date(self.expiration_date)
@@ -53,7 +58,7 @@ class Card(BaseModel):
             "expiration_date": payload.exp_date,
             "card_holder": payload.holder,
             "card_number": payload.number,
-            "cvv": payload.cvv
+            "cvv": payload.cvv,
         })
 
     def to_model(self) -> CardModel:
@@ -68,9 +73,15 @@ class Card(BaseModel):
         """
         In order to protect sensitive information, We should output a redacted representation to the user
         """
+        try:
+            brand = CreditCard(self.card_number).get_brand()
+        except BrandNotFound:
+            brand = None
+
         return CardPayload(**{
             "exp_date": format_standard_date_to_expire_date(self.expiration_date),
             "holder": self.card_holder,
             "number": f"************{self.card_number[12:]}",
-            "cvv": self.cvv
+            "cvv": self.cvv,
+            "brand": brand
         })

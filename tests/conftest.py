@@ -56,7 +56,7 @@ def build_card_data():
 def build_card_payload():
     def _builder(**kwargs):
         return CardPayload(**{
-            "number": "0000111122223333",
+            "number": "5425233430109903",
             "holder": "Jonhnatha Trigueiro",
             "exp_date": "02/2026",
             "cvv": "1234",
