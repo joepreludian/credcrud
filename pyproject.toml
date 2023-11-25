@@ -24,6 +24,9 @@ pytest-sqlalchemy = {version = "^0.2.1", optional = true}
 # Using the optional approach will let me to install via pip extra syntax: e.g. "pip install .[testing]"
 testing = ["httpx", "pytest", "pytest-cov", "pytest-sqlalchemy"]
 
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.5.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
