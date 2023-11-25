@@ -4,7 +4,7 @@ import pytest
 from pydantic import ValidationError
 
 from credcrud.card.models import Card as CardModel
-from credcrud.card.schemas import Card, CardPayload
+from credcrud.card.schemas import Card, CardPayload, RedactedCardPayload
 
 
 class TestCardSchema:
@@ -62,7 +62,7 @@ class TestCardSchema:
 
         output = card.to_representation()
 
-        assert type(output) is CardPayload
+        assert type(output) is RedactedCardPayload
         assert output.number == f"************{payload.number[12:]}"
         assert output.exp_date == payload.exp_date
         assert output.brand == brand

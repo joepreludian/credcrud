@@ -23,6 +23,13 @@ class CardPayload(BaseModel):
     brand: Optional[str] = None
 
 
+class RedactedCardPayload(CardPayload):
+    @model_validator(mode="after")
+    def redact(self):
+        self.exp_date = format_standard_date_to_expire_date(self.exp_date)
+        self.number = f"************{self.number[12:]}"
+
+
 class Card(BaseModel):
     card_holder: str = Field(
         min_length=CardConstants.HOLDER_MIN_SIZE,
@@ -97,7 +104,7 @@ class Card(BaseModel):
 
         return CardModel(**transformed_data)
 
-    def to_representation(self) -> CardPayload:
+    def to_representation(self) -> RedactedCardPayload:
         """
         In order to protect sensitive information, We should output a
         redacted representation to the user
@@ -107,11 +114,11 @@ class Card(BaseModel):
         except BrandNotFound:
             brand = None
 
-        return CardPayload(
+        return RedactedCardPayload(
             **{
-                "exp_date": format_standard_date_to_expire_date(self.expiration_date),
+                "exp_date": self.expiration_date,
                 "holder": self.card_holder,
-                "number": f"************{self.card_number[12:]}",
+                "number": self.card_number,
                 "cvv": self.cvv,
                 "brand": brand,
             }
