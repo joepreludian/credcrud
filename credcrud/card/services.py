@@ -19,4 +19,4 @@ class CardService:
 
     def get_all(self):
         all_cards = self._repository.get_all()
-        return [CardSchema.from_model(card) for card in all_cards]
+        return (CardSchema.from_model(card) for card in all_cards)

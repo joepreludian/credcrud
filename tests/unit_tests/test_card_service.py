@@ -6,6 +6,7 @@ from credcrud.card.exceptions import CardNotFoundException
 from credcrud.card.schemas import Card as CardSchema
 from credcrud.card.services import CardService
 from tests.builders import test_db_session
+from types import GeneratorType
 
 
 class TestCardService:
@@ -39,5 +40,5 @@ class TestCardService:
     def test_get_all_cards(self):
         all_cards = self.card_svc.get_all()
 
-        assert type(all_cards) is list
-        assert type(all_cards[0]) is CardSchema
+        assert type(all_cards) is GeneratorType
+        assert type(next(all_cards)) is CardSchema
