@@ -4,7 +4,7 @@ import pytest
 from pydantic import ValidationError
 
 from credcrud.card.models import Card as CardModel
-from credcrud.card.schemas import Card, CardPayload, RedactedCardPayload
+from credcrud.card.schemas import Card, RedactedCardPayload
 
 
 class TestCardSchema:
@@ -35,13 +35,14 @@ class TestCardSchema:
             ({'number': '1234'}, "String should have at least 15 characters"),
             ({'number': '123456781234abcd'}, "Card number must have only numbers"),
             ({'number': '1111111111111111'}, "Card number provided is invalid"),
-            ({'exp_date': '01/12/1993'}, "Card exp_date must be on mm/YYYY format"),
+            ({'exp_date': '01/12/1993'}, "CardPayload must have expiration date in format mm/YYYY"),
+            ({'exp_date': '09/2022'}, "Card has expired"),
             ({'cvv': '1abc'}, "CVV must be a number with 3 up to 4 digits"),
         )
     )
     def test_payload_invalid(self, override, error_message, build_card_payload):
-        payload = build_card_payload(**override)
         with pytest.raises(ValidationError) as exception_raised:
+            payload = build_card_payload(**override)
             Card.from_payload(payload)
 
         assert error_message in str(exception_raised)

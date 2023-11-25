@@ -1,4 +1,3 @@
-from datetime import datetime, timedelta
 
 import psycopg2
 import pytest
@@ -43,7 +42,6 @@ def build_card_data():
             "card_number": "0000111122223333",
             "card_holder": "Jonhnatha Trigueiro",
             "exp_date": "02/2026",
-            "expiration_date": datetime.now().date() + timedelta(days=5),
             "cvv": "1234",
             **kwargs
         }

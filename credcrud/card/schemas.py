@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import Optional
 
 from creditcard import CreditCard
@@ -7,10 +7,7 @@ from pydantic import BaseModel, Field, model_validator
 
 from credcrud.card.constants import CardConstants
 from credcrud.card.models import Card as CardModel
-from credcrud.card.utils import (
-    format_standard_date_to_expire_date,
-    standardize_expire_date,
-)
+from credcrud.card.utils import date_to_expire_date, expire_date_to_date
 
 
 class CardPayload(BaseModel):
@@ -19,15 +16,28 @@ class CardPayload(BaseModel):
     number: str
     cvv: str
 
-    id: Optional[str] = None
-    brand: Optional[str] = None
+    @model_validator(mode="after")
+    def validate(self):
+        try:
+            current_expiration_date = datetime.strptime(self.exp_date, "%m/%Y").date()
+        except ValueError:
+            raise ValueError("CardPayload must have expiration date in format mm/YYYY")
+
+        if current_expiration_date <= date.today():
+            raise ValueError("The Card has expired")
+
+        return self
 
 
 class RedactedCardPayload(CardPayload):
+    id: Optional[str] = None
+    brand: Optional[str] = None
+
     @model_validator(mode="after")
     def redact(self):
-        self.exp_date = format_standard_date_to_expire_date(self.exp_date)
         self.number = f"************{self.number[12:]}"
+
+        return self
 
 
 class Card(BaseModel):
@@ -40,7 +50,7 @@ class Card(BaseModel):
         min_length=CardConstants.CARD_NUMBER_MIN_SIZE,
         max_length=CardConstants.CARD_NUMBER_MAX_SIZE,
     )
-    expiration_date: str
+    expiration_date: date
     cvv: str = Field(
         min_length=CardConstants.CVV_MIN_SIZE, max_length=CardConstants.CVV_MAX_SIZE
     )
@@ -59,11 +69,6 @@ class Card(BaseModel):
             raise ValueError("Card number provided is invalid")
 
         try:
-            self.expiration_date = standardize_expire_date(self.expiration_date)
-        except ValueError as exception:
-            raise ValueError("Card exp_date must be on mm/YYYY format") from exception
-
-        try:
             int(self.cvv)
         except ValueError as exception:
             raise ValueError(
@@ -76,7 +81,7 @@ class Card(BaseModel):
     def from_payload(cls, payload: CardPayload):
         return cls(
             **{
-                "expiration_date": payload.exp_date,
+                "expiration_date": expire_date_to_date(payload.exp_date),
                 "card_holder": payload.holder,
                 "card_number": payload.number,
                 "cvv": payload.cvv,
@@ -90,18 +95,13 @@ class Card(BaseModel):
                 "id": str(card_model.id),
                 "card_number": card_model.card_number,
                 "card_holder": card_model.card_holder,
-                "expiration_date": card_model.expiration_date.strftime("%m/%Y"),
+                "expiration_date": card_model.expiration_date,
                 "cvv": card_model.cvv,
             }
         )
 
     def to_model(self) -> CardModel:
         transformed_data = self.dict()
-
-        transformed_data["expiration_date"] = datetime.strptime(
-            transformed_data["expiration_date"], "%Y-%m-%d"
-        ).date()
-
         return CardModel(**transformed_data)
 
     def to_representation(self) -> RedactedCardPayload:
@@ -116,7 +116,7 @@ class Card(BaseModel):
 
         return RedactedCardPayload(
             **{
-                "exp_date": self.expiration_date,
+                "exp_date": date_to_expire_date(self.expiration_date),
                 "holder": self.card_holder,
                 "number": self.card_number,
                 "cvv": self.cvv,

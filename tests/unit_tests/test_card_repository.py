@@ -1,3 +1,4 @@
+import datetime
 import uuid
 
 import pytest
@@ -10,7 +11,8 @@ from tests.builders import test_db_session
 
 class TestCardRepository:
     def test_create_card(self, build_card_data):
-        card_data = build_card_data(card_holder="Jessica Ribeiro")
+        card_data = build_card_data(card_holder="Jessica Ribeiro", \
+                                    expiration_date=datetime.datetime.now().date())
 
         cr = CardRepository(test_db_session)
         created_card = cr.create(
@@ -31,7 +33,8 @@ class TestCardRepository:
         cr.delete(created_card)
 
     def test_fetch_card(self, build_card_data):
-        card_data = build_card_data(card_number="1000111122223333")
+        card_data = build_card_data(card_number="1000111122223333",
+                                    expiration_date=datetime.datetime.now().date())
 
         cr = CardRepository(test_db_session)
         created_card = cr.create(
@@ -61,7 +64,8 @@ class TestCardRepository:
         assert f"The Card {search_id} could not be found" in str(exc)
 
     def test_get_all_cards(self, build_card_data):
-        card_data = build_card_data(card_number="6062826786276634")
+        card_data = build_card_data(card_number="6062826786276634",
+                                    expiration_date=datetime.datetime.now().date() )
 
         cr = CardRepository(test_db_session)
 
