@@ -61,7 +61,7 @@ class TestCardSchema:
         payload = build_card_payload(**{"number": card_number})
         card = Card.from_payload(payload)
 
-        output = card.to_representation()
+        output = card.as_redacted_payload()
 
         assert type(output) is RedactedCardPayload
         assert output.number == f"************{payload.number[12:]}"

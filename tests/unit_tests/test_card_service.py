@@ -20,7 +20,7 @@ class TestCardService:
         new_card = self.card_svc.create(card_payload)
 
         assert type(new_card) is CardSchema
-        assert new_card.to_representation().exp_date == card_payload.exp_date
+        assert new_card.as_redacted_payload().exp_date == card_payload.exp_date
         assert new_card.id is not None
 
     def test_get_card_by_id(self, build_card_payload):

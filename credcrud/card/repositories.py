@@ -1,6 +1,8 @@
 import uuid
 
-from credcrud.card.exceptions import CardNotFoundException
+from sqlalchemy.exc import IntegrityError
+
+from credcrud.card.exceptions import CardAlreadyExistsException, CardNotFoundException
 from credcrud.card.models import Card as CardModel
 
 
@@ -12,8 +14,23 @@ class CardRepository:
         with self._db_session() as db:
             card.id = uuid.uuid4()
             db.add(card)
-            db.commit()
-            db.refresh(card)
+
+            try:
+                db.commit()
+            except IntegrityError as current_exception:
+                if all(
+                    [
+                        exc_txt in str(current_exception)
+                        for exc_txt in ["card_number", "already exists"]
+                    ]
+                ):
+                    raise CardAlreadyExistsException(
+                        "A card with this number has been added"
+                    )
+
+                raise current_exception
+            else:
+                db.refresh(card)
 
             return card
 

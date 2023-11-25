@@ -104,7 +104,7 @@ class Card(BaseModel):
         transformed_data = self.dict()
         return CardModel(**transformed_data)
 
-    def to_representation(self) -> RedactedCardPayload:
+    def as_redacted_payload(self) -> RedactedCardPayload:
         """
         In order to protect sensitive information, We should output a
         redacted representation to the user
@@ -121,5 +121,6 @@ class Card(BaseModel):
                 "number": self.card_number,
                 "cvv": self.cvv,
                 "brand": brand,
+                "id": self.id,
             }
         )

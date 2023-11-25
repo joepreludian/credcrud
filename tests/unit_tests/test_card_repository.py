@@ -3,9 +3,10 @@ import uuid
 
 import pytest
 
-from credcrud.card.exceptions import CardNotFoundException
+from credcrud.card.exceptions import CardAlreadyExistsException, CardNotFoundException
 from credcrud.card.models import Card
 from credcrud.card.repositories import CardRepository
+from credcrud.card.schemas import Card as CardSchema
 from tests.builders import test_db_session
 
 
@@ -33,8 +34,8 @@ class TestCardRepository:
         cr.delete(created_card)
 
     def test_fetch_card(self, build_card_data):
-        card_data = build_card_data(card_number="1000111122223333",
-                                    expiration_date=datetime.datetime.now().date())
+        card_data = build_card_data(card_number="4556914768079032",
+                                    expiration_date=(datetime.datetime.now() + datetime.timedelta(days=10)).date())
 
         cr = CardRepository(test_db_session)
         created_card = cr.create(
@@ -53,7 +54,33 @@ class TestCardRepository:
         for attribute in ("card_number", "card_holder", "expiration_date", "cvv", "id"):
             assert getattr(retrieved_card, attribute) == getattr(created_card, attribute)
 
+        assert CardSchema.from_model(retrieved_card).as_redacted_payload().id is not None
+
         cr.delete(retrieved_card)
+
+    def test_add_card_that_already_exists(self, build_card_data):
+        card_data = build_card_data(card_number="4556914768079032",
+                                    expiration_date=(datetime.datetime.now() + datetime.timedelta(days=10)).date())
+
+        cr = CardRepository(test_db_session)
+        card = Card(
+            card_number=card_data["card_number"],
+            card_holder=card_data["card_holder"],
+            expiration_date=card_data["expiration_date"],
+            cvv=card_data["cvv"]
+        )
+
+        cr.create(card)
+        with pytest.raises(CardAlreadyExistsException) as exc:
+            cr.create(Card(
+                card_number=card_data["card_number"],
+                card_holder=card_data["card_holder"],
+                expiration_date=card_data["expiration_date"],
+                cvv=card_data["cvv"]
+            ))
+
+        assert "A card with this number has been added" in str(exc)
+
     def test_fetch_card_not_found(self):
         cr = CardRepository(test_db_session)
 
