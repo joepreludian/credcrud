@@ -1,9 +1,9 @@
-import pytest
-import psycopg2
+from contextlib import contextmanager
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from credcrud.database import Base, DATABASE_CREDENTIALS, DATABASE_NAME, DATABASE_URL
-from contextlib import contextmanager
+
+from credcrud.database import DATABASE_URL, Base
 
 
 @contextmanager

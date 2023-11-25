@@ -2,9 +2,9 @@ import uuid
 
 import pytest
 
+from credcrud.card.exceptions import CardNotFoundException
 from credcrud.card.models import Card
 from credcrud.card.repositories import CardRepository
-from credcrud.card.exceptions import CardNotFoundException
 from tests.builders import test_db_session
 
 
@@ -56,7 +56,7 @@ class TestCardRepository:
 
         search_id = str(uuid.uuid4())
         with pytest.raises(CardNotFoundException) as exc:
-            card = cr.get_by_id(id=search_id)
+            cr.get_by_id(id=search_id)
 
         assert f"The Card {search_id} could not be found" in str(exc)
 

@@ -1,7 +1,7 @@
 import uuid
 
-from credcrud.card.models import Card as CardModel
 from credcrud.card.exceptions import CardNotFoundException
+from credcrud.card.models import Card as CardModel
 
 
 class CardRepository:

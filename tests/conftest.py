@@ -1,12 +1,10 @@
 from datetime import datetime, timedelta
-from credcrud.card.schemas import CardPayload
 
-import pytest
 import psycopg2
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from credcrud.database import Base, DATABASE_CREDENTIALS, DATABASE_NAME, DATABASE_URL
-from contextlib import contextmanager
+import pytest
+
+from credcrud.card.schemas import CardPayload
+from credcrud.database import DATABASE_CREDENTIALS, DATABASE_NAME
 
 
 @pytest.fixture(autouse=True, scope="session")
@@ -51,6 +49,7 @@ def build_card_data():
         }
 
     return _builder
+
 
 @pytest.fixture()
 def build_card_payload():

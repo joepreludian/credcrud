@@ -1,9 +1,10 @@
-import pytest
 import datetime
+
+import pytest
 from pydantic import ValidationError
 
-from credcrud.card.schemas import Card, CardPayload
 from credcrud.card.models import Card as CardModel
+from credcrud.card.schemas import Card, CardPayload
 
 
 class TestCardSchema:

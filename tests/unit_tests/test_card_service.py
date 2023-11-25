@@ -2,10 +2,10 @@ import uuid
 
 import pytest
 
-from tests.builders import test_db_session
-from credcrud.card.services import CardService
-from credcrud.card.schemas import Card as CardSchema
 from credcrud.card.exceptions import CardNotFoundException
+from credcrud.card.schemas import Card as CardSchema
+from credcrud.card.services import CardService
+from tests.builders import test_db_session
 
 
 class TestCardService:
