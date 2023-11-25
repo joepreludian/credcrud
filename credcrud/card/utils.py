@@ -7,9 +7,5 @@ def expire_date_to_date(expire_date: str) -> date:
     return (next_month - timedelta(days=1)).date()
 
 
-def format_standard_date_to_expire_date(standardized_expire_date) -> str:
-    return datetime.strptime(standardized_expire_date, "%Y-%m-%d").strftime("%m/%Y")
-
-
 def date_to_expire_date(date: date) -> str:
     return date.strftime("%m/%Y")
