@@ -1,13 +1,14 @@
 import uuid
 
-from credcrud.card.models import Card
+from credcrud.card.models import Card as CardModel
+from credcrud.card.exceptions import CardNotFoundException
 
 
 class CardRepository:
     def __init__(self, db_session):
         self._db_session = db_session
 
-    def create(self, card: Card) -> Card:
+    def create(self, card: CardModel) -> CardModel:
         with self._db_session() as db:
             card.id = uuid.uuid4()
             db.add(card)
@@ -16,10 +17,22 @@ class CardRepository:
 
             return card
 
-    def get_by_id(self, id: str) -> Card:
+    def get_by_id(self, id: str) -> CardModel:
         with self._db_session() as db:
-            return db.query(Card).filter(Card.id == id).first()
+            found_card = db.query(CardModel).filter(CardModel.id == id).first()
 
-    def get_all(self) -> list[Card]:
+            if found_card:
+                return found_card
+
+        raise CardNotFoundException(f"The Card {id} could not be found")
+
+    def get_all(self) -> list[CardModel]:
         with self._db_session() as db:
-            return db.query(Card).all()
+            return db.query(CardModel).all()
+
+    def delete(self, card: CardModel):
+        with self._db_session() as db:
+            db.delete(card)
+            db.commit()
+
+        return True

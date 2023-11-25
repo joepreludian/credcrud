@@ -26,6 +26,8 @@ class Card(BaseModel):
     cvv: str = Field(min_length=CardConstants.CVV_MIN_SIZE,
                 max_length=CardConstants.CVV_MAX_SIZE)
 
+    id: Optional[str] = None
+
 
     @model_validator(mode='after')
     def validate(self):
@@ -59,6 +61,16 @@ class Card(BaseModel):
             "card_holder": payload.holder,
             "card_number": payload.number,
             "cvv": payload.cvv,
+        })
+
+    @classmethod
+    def from_model(cls, card_model: CardModel):
+        return cls(**{
+            "id": str(card_model.id),
+            "card_number": card_model.card_number,
+            "card_holder": card_model.card_holder,
+            "expiration_date": card_model.expiration_date.strftime("%m/%Y"),
+            "cvv": card_model.cvv
         })
 
     def to_model(self) -> CardModel:
