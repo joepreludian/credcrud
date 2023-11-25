@@ -10,4 +10,4 @@ async def healthcheck() -> dict[str, str]:
     return {"status": "I'm alive"}
 
 
-app.include_router(card_router, prefix="/credit-card", tags=["Credit Card"])
+app.include_router(card_router, prefix="/v1/credit-card", tags=["Credit Card"])
