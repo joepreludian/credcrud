@@ -15,7 +15,8 @@ def test_db_session():
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    yield session
-
-    session.close()
-    engine.dispose()
+    try:
+        yield session
+    finally:
+        session.close()
+        engine.dispose()
