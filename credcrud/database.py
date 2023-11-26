@@ -2,8 +2,7 @@ import os
 from contextlib import contextmanager
 
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 DATABASE_CREDENTIALS = os.environ.get("DATABASE_CREDENTIALS")
 DATABASE_NAME = os.environ.get("DATABASE_NAME")
