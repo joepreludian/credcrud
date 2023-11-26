@@ -7,7 +7,7 @@ from credcrud.card.exceptions import CardAlreadyExistsException, CardNotFoundExc
 from credcrud.card.models import Card
 from credcrud.card.repositories import CardRepository
 from credcrud.card.schemas import Card as CardSchema
-from tests.builders import test_db_session
+from tests.builders import db_session
 
 
 class TestCardRepository:
@@ -15,7 +15,7 @@ class TestCardRepository:
         card_data = build_card_data(card_holder="Jessica Ribeiro", \
                                     expiration_date=datetime.datetime.now().date())
 
-        cr = CardRepository(test_db_session)
+        cr = CardRepository(db_session)
         created_card = cr.create(
             Card(
                 card_number=card_data["card_number"],
@@ -37,7 +37,7 @@ class TestCardRepository:
         card_data = build_card_data(card_number="4556914768079032",
                                     expiration_date=(datetime.datetime.now() + datetime.timedelta(days=10)).date())
 
-        cr = CardRepository(test_db_session)
+        cr = CardRepository(db_session)
         created_card = cr.create(
             Card(
                 card_number=card_data["card_number"],
@@ -62,7 +62,7 @@ class TestCardRepository:
         card_data = build_card_data(card_number="4556914768079032",
                                     expiration_date=(datetime.datetime.now() + datetime.timedelta(days=10)).date())
 
-        cr = CardRepository(test_db_session)
+        cr = CardRepository(db_session)
         card = Card(
             card_number=card_data["card_number"],
             card_holder=card_data["card_holder"],
@@ -82,7 +82,7 @@ class TestCardRepository:
         assert "A card with this number has been added" in str(exc)
 
     def test_fetch_card_not_found(self):
-        cr = CardRepository(test_db_session)
+        cr = CardRepository(db_session)
 
         search_id = str(uuid.uuid4())
         with pytest.raises(CardNotFoundException) as exc:
@@ -94,7 +94,7 @@ class TestCardRepository:
         card_data = build_card_data(card_number="6062826786276634",
                                     expiration_date=datetime.datetime.now().date() )
 
-        cr = CardRepository(test_db_session)
+        cr = CardRepository(db_session)
 
         created_card = cr.create(
             Card(

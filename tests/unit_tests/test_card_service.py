@@ -6,13 +6,13 @@ import pytest
 from credcrud.card.exceptions import CardNotFoundException
 from credcrud.card.schemas import Card as CardSchema
 from credcrud.card.services import CardService
-from tests.builders import test_db_session
+from tests.builders import db_session
 
 
 class TestCardService:
 
-    def setup(self):
-        self.card_svc = CardService(db_session=test_db_session)
+    def setup_method(self):
+        self.card_svc = CardService(db_session=db_session)
 
     def test_create_card(self, build_card_payload):
         card_payload = build_card_payload()

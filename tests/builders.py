@@ -7,7 +7,7 @@ from credcrud.database import DATABASE_URL, Base
 
 
 @contextmanager
-def test_db_session():
+def db_session():
     engine = create_engine(f"{DATABASE_URL}_test")
 
     Base.metadata.create_all(bind=engine)

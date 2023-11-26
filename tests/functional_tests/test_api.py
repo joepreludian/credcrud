@@ -6,9 +6,9 @@ from fastapi.testclient import TestClient
 from credcrud.auth.handler import SECRET_TOKEN
 from credcrud.card.routes import router as card_router
 from credcrud.main import app
-from tests.builders import test_db_session
+from tests.builders import db_session
 
-card_router.db_session = test_db_session
+card_router.db_session = db_session
 
 client = TestClient(app)
 
@@ -211,4 +211,4 @@ class TestCardEndpoints:
         )
 
         assert fetch_return.status_code == 204
-        assert fetch_return.text is ''  # No content
+        assert fetch_return.text == ''  # No content
