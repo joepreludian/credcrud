@@ -76,9 +76,13 @@ Como referencia, criei um arquivo de exemplo de requisições para que voce poss
 Caso queira voce pode também consultar o Swagger gerado pelo projeto. Antes fique ciente das limitações na seção "Tradeoffs" desse documento antes de consumir este. http://127.0.0.1:8765/docs
 
 ## 🧯 Testando o projeto
-Esse software foi concebido utilizando boas práticas de código com foco no desenvolvimento de testes desde sua concepção. A estratégia foi simples: ao passo que eu projetava a funcionalidade, já codificava um teste para validar se o código estava se comportando corretamente. Como um extra, adicionei cobertura de testes para o processo, o que viabilizou entender corretamente as áreas que eu precisava cobrir. O grafo da cobertura de testes está apresentada abaixo:
+Esse software foi concebido utilizando boas práticas de código com foco no desenvolvimento de testes desde sua concepção. A estratégia foi simples: ao passo que eu projetava a funcionalidade, já codificava um teste para validar se o código estava se comportando corretamente. Como um extra, adicionei cobertura de testes para o processo, o que viabilizou entender corretamente as áreas que eu precisava cobrir. O mapa da cobertura de testes está apresentada abaixo:
 
 ![Coverage Graph - Courtesy of CodeCov](https://codecov.io/gh/joepreludian/credcrud/graphs/icicle.svg?token=2KFE4MKR9X)
+
+### ⚙️ Entendendo o gráfico acima
+Cada bloco representa um único arquivo no projeto. O tamanho e a cor de cada bloco são representados pelo número de linhas e pela cobertura, respectivamente.
+Quanto mais verde, mais coberto. Quanto mais vermelho, menos coberto.
 
 Para executar os testes, basta executar o seguinte código:
 
