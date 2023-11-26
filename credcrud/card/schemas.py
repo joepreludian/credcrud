@@ -101,7 +101,7 @@ class Card(BaseModel):
         )
 
     def to_model(self) -> CardModel:
-        transformed_data = self.dict()
+        transformed_data = self.model_dump()
         return CardModel(**transformed_data)
 
     def as_redacted_payload(self) -> RedactedCardPayload:
