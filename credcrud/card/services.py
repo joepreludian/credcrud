@@ -7,7 +7,7 @@ from credcrud.card.schemas import CardPayload
 
 class CardService:
     def __init__(self, db_session=default_db_session):
-        self._repository = CardRepository(db_session)
+        self._repository: CardRepository = CardRepository(db_session)
 
     def create(self, card_payload: CardPayload):
         card_payload = CardSchema.from_payload(card_payload).to_model()
@@ -20,3 +20,7 @@ class CardService:
     def get_all(self):
         all_cards = self._repository.get_all()
         return (CardSchema.from_model(card) for card in all_cards)
+
+    def delete(self, id: str):
+        card_model = self._repository.delete(self._repository.get_by_id(id))
+        return True
