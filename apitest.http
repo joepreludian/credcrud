@@ -1,0 +1,31 @@
+### Add a new card based on a payload
+
+POST http://127.0.0.1:8765/v1/credit-card
+Content-Type: application/json
+Authorization: bearer your_secret_token
+
+{
+    "exp_date": "02/2024",
+    "holder": "Jon Trigueiro",
+    "number": "5526172242727676",
+    "cvv": "123"
+}
+
+### Retrieve an existing card
+
+GET http://127.0.0.1:8765/v1/credit-card/f5b39d0d-88ae-470d-8e87-448d6fcf401c
+Content-Type: application/json
+Authorization: bearer your_secret_token
+
+### Delete a card
+
+DELETE http://127.0.0.1:8765/v1/credit-card/47974b2d-b5f2-46e2-a6c4-da88595d51c3
+Content-Type: application/json
+Authorization: bearer your_secret_token
+
+### Get all available cards
+
+GET http://127.0.0.1:8765/v1/credit-card/
+Content-Type: application/json
+Authorization: bearer your_secret_token
+
