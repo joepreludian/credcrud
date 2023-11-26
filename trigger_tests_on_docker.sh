@@ -2,4 +2,4 @@
 set -xe
 
 pip install .[testing]
-pytest --cov --cov-report xml:coverage.xml --cov-report term
+pytest --cov=credcrud --cov-report xml:coverage.xml --cov-report term
