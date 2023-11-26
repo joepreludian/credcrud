@@ -136,7 +136,7 @@ Basicamente os testes unitários verificam cada componente do código individual
 
 **ℹ️ OBSERVAÇÃO**: Tecnicamente testar a camada de serviço seria considerado um teste funcional e estes funcionais, em si, seria meio que um e2e.
 
-### Executando o pre-commit no seu projeto
+### 🔎 Executando o pre-commit no seu projeto
 Para instalar o pré-commit no seu projeto irei presumir que voce possui um interpretador python 3.12 instalado na sua máquina e o comando `poetry` disponível. Também irei assumir que voce já clonou esse repositório localmente. =)
 Para rodar instalar as dependencias do projeto internamente e executar o pre-commit no código base, faça:
 
