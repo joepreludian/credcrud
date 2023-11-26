@@ -124,12 +124,34 @@ Coverage XML written to file coverage.xml
 ==================================== 42 passed in 1.19s =====================================
 ```
 
+
+
 Os testes foram divididos em duas seções: `unitários` e `funcionais`.
-Basicamente os testes unitários verificam cada componente do código individualmente. Os testes funcionais por sua vez simulam o funcionamento de todos os componentes em conjunto. A melhor abordagem para isto é realiza-los por meio do teste dos endpoints em si. 
+Basicamente os testes unitários verificam cada componente do código individualmente. Os testes funcionais por sua vez simulam o funcionamento de todos os componentes em conjunto. A melhor abordagem para isto é realiza-los por meio do teste dos endpoints em si.
 
 **ℹ️ OBSERVAÇÃO**: Tecnicamente testar a camada de serviço seria considerado um teste funcional e estes funcionais, em si, seria meio que um e2e.
 
+### Executando o pre-commit no seu projeto
+Para instalar o pré-commit no seu projeto irei presumir que voce possui um interpretador python 3.12 instalado na sua máquina e o comando `poetry` disponível. Também irei assumir que voce já clonou esse repositório localmente. =)
+Para rodar instalar as dependencias do projeto internamente e executar o pre-commit no código base, faça:
 
-# 🫡 Humanos
+    $ poetry install --with dev
+    $ pre-commit run --all-files
+
+A saída do comando será algo mais ou menos assim:
+
+```text
+$ pre-commit run --all-files
+trim trailing whitespace.................................................Passed
+fix end of files.........................................................Passed
+bandit...................................................................Passed
+black....................................................................Passed
+isort (python)...........................................................Passed
+autoflake................................................................Passed
+flake8...................................................................Passed
+```
+
+## 🫡 Humanos e considerações finais
+O projeto foi bem divertido de fazer, apesar de trabalhoso. Acredito que seja possível mostrar um pouco mais de minhas habilidades técnicas para voces. Espero que gostem.
 
 * Jon Trigueiro - [jon.dev.br](https://jon.dev.br)
