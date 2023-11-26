@@ -28,4 +28,3 @@ Authorization: bearer your_secret_token
 GET http://127.0.0.1:8765/v1/credit-card/
 Content-Type: application/json
 Authorization: bearer your_secret_token
-
