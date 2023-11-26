@@ -61,6 +61,7 @@ Infelizmente me puz um certo tempo para a entrega do desafio, o que me forçou a
 
 ## 🚀 Executando o projeto
 Esse projeto precisa ser instalado antes de sua execução propriamente dita. Isto ocorre porque o banco de dados precisa ser criado corretamente antes do uso. Para isso, rode o seguinte comando (necessário apenas a primeira vez)
+Estou assumindo que voce possua `Docker` e `Docker Compose` instalados na sua máquina antes de executar os comandos abaixo.
 
     $ make setup
 
