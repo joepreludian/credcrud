@@ -2,9 +2,10 @@ import uuid
 
 import pytest
 from fastapi.testclient import TestClient
-from credcrud.main import app
+
 from credcrud.auth.handler import SECRET_TOKEN
 from credcrud.card.routes import router as card_router
+from credcrud.main import app
 from tests.builders import test_db_session
 
 card_router.db_session = test_db_session

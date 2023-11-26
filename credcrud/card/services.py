@@ -1,8 +1,7 @@
-from database import db_session as default_db_session
-
 from credcrud.card.repositories import CardRepository
 from credcrud.card.schemas import Card as CardSchema
 from credcrud.card.schemas import CardPayload
+from credcrud.database import db_session as default_db_session
 
 
 class CardService:
