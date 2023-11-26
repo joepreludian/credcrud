@@ -22,5 +22,5 @@ class CardService:
         return (CardSchema.from_model(card) for card in all_cards)
 
     def delete(self, id: str):
-        card_model = self._repository.delete(self._repository.get_by_id(id))
+        self._repository.delete(self._repository.get_by_id(id))
         return True
