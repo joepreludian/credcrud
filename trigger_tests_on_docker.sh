@@ -2,4 +2,4 @@
 set -xe
 
 pip install .[testing]
-pytest --cov
+pytest --cov --cov-report xml:coverage.xml --cov-report term
