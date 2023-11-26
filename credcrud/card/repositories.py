@@ -2,7 +2,11 @@ import uuid
 
 from sqlalchemy.exc import IntegrityError
 
-from credcrud.card.exceptions import CardAlreadyExistsException, CardNotFoundException
+from credcrud.card.exceptions import (
+    CardAlreadyExistsException,
+    CardNotFoundException,
+    InvalidIDProvided,
+)
 from credcrud.card.models import Card as CardModel
 
 
@@ -35,6 +39,11 @@ class CardRepository:
             return card
 
     def get_by_id(self, id: str) -> CardModel:
+        try:
+            uuid.UUID(f"urn:uuid:{id}", version=4)
+        except ValueError:
+            raise InvalidIDProvided(f"The ID '{id}' is not an invalid UUID")
+
         with self._db_session() as db:
             found_card = db.query(CardModel).filter(CardModel.id == id).first()
 
