@@ -57,6 +57,9 @@ class Card(BaseModel):
 
     id: Optional[str] = None
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
     @model_validator(mode="after")
     def validate(self):
         try:
@@ -102,6 +105,9 @@ class Card(BaseModel):
 
     def to_model(self) -> CardModel:
         transformed_data = self.model_dump()
+
+        transformed_data["card_number"] = transformed_data["card_number"]
+
         return CardModel(**transformed_data)
 
     def as_redacted_payload(self) -> RedactedCardPayload:

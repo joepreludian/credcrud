@@ -1,7 +1,9 @@
+import os
+
 from fastapi import HTTPException, Request, status
 
 # Hardcoded token for demonstration purposes
-SECRET_TOKEN = "your_secret_token"  # nosec
+SECRET_TOKEN = os.environ.get("API_TOKEN", "your_secret_token")  # nosec
 
 
 def require_simple_token(request: Request):

@@ -1,4 +1,6 @@
 
+from unittest import mock
+
 import psycopg2
 import pytest
 
@@ -92,3 +94,8 @@ def rsa_text_decrypted_example():
 def rsa_text_encrypted_example():
     return ("Sq3GPz6DrWtt0o6OcXSnIaspNHVevbUZ9fdKDhLFu1AMFHYOrUx0wwO+fJKGRLYggMRnM1K6+jOozTe1CIVmz8+cM3w7LyOywtksw"
             "Y4bu13QTeLXPR1Yhf9sz9P9JamHI9FQq1RQDEesA81jmxSj0PIys5X9qOTL3/azAsStFpQ=")
+
+@pytest.fixture(autouse=True)
+def patch_open_file(rsa_private_key_as_text_1024):
+    with mock.patch("builtins.open", mock.mock_open(read_data=rsa_private_key_as_text_1024)), mock.patch("os.path.isfile", return_value=True):
+        yield

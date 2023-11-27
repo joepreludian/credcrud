@@ -15,7 +15,8 @@ class TestRSABuilder:
             (True, ), (False, )
     ))
     def test_get_rsa_service_from_first_time(self, key_file_exists, rsa_private_key_as_text_1024):
-        with mock.patch("builtins.open", mock.mock_open(read_data=rsa_private_key_as_text_1024)), mock.patch("os.path.isfile", return_value=key_file_exists):
+        with (mock.patch("builtins.open", mock.mock_open(read_data=rsa_private_key_as_text_1024)),
+              mock.patch("os.path.isfile", return_value=key_file_exists)):
             kr = RSABuilder()
             assert type(kr.get_rsa_service()) is RSAService
 
