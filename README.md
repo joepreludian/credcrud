@@ -6,9 +6,9 @@ Este projeto será montado apenas para fins de estudo. O mesmo trabalhará em ci
 
 ## 🧭 Requisitos técnicos
 * Será necessário cadastrar os dados do cartão;
-* Faz-se necessário a utilização da biblioteca [MaisTodos/python-creditcard]( https://github.com/MaisTodos/python-creditcard) para a validação da numeração do cartão.
-  * Vale ressaltar que se faz necessário a configuração dos outros dados, como Data de expiração, CVV, etc.
-* O dado da numeração do cartão precisa estar criptografado.
+* Faz-se necessário a utilização da biblioteca [MaisTodos/python-creditcard]( https://github.com/MaisTodos/python-creditcard) para a validação da numeração do cartão;
+  * Vale ressaltar que se faz necessário a configuração dos outros dados, como data de expiração, CVV, etc;
+* O dado da numeração do cartão precisa estar criptografado;
 * A API precisa estar protegida por meio de credenciais.
 
 # 🛠️ Estratégia de trabalho
