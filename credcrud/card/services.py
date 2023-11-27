@@ -12,27 +12,6 @@ from credcrud.card.schemas import CardPayload
 from credcrud.database import db_session as default_db_session
 
 
-class CardService:
-    def __init__(self, db_session=default_db_session):
-        self._repository: CardRepository = CardRepository(db_session)
-
-    def create(self, card_payload: CardPayload):
-        card_payload = CardSchema.from_payload(card_payload).to_model()
-        return CardSchema.from_model(self._repository.create(card_payload))
-
-    def get_by_id(self, id: str):
-        card_model = self._repository.get_by_id(id)
-        return CardSchema.from_model(card_model)
-
-    def get_all(self):
-        all_cards = self._repository.get_all()
-        return (CardSchema.from_model(card) for card in all_cards)
-
-    def delete(self, id: str):
-        self._repository.delete(self._repository.get_by_id(id))
-        return True
-
-
 class RSAService:
     def _persist_private_key_to_text(self, passwd):
         return self._private_key.private_bytes(
@@ -99,7 +78,7 @@ class RSABuilder:
             return file_handler.read()
 
     def _write_key_to_file(self):
-        with open(self._key_file, "r") as file_handler:
+        with open(self._key_file, "w") as file_handler:
             return file_handler.write(self._rsa.private_key_as_text)
 
     def get_rsa_service(self):
@@ -117,3 +96,31 @@ class RSABuilder:
         else:
             self._rsa = RSAService(private_key_passwd=passwd)
             self._write_key_to_file()
+
+
+class CardService:
+    def __init__(self, db_session=default_db_session):
+        self._repository: CardRepository = CardRepository(db_session)
+        self._rsa: RSAService = RSABuilder().get_rsa_service()
+
+    def create(self, card_payload: CardPayload):
+        card_model = CardSchema.from_payload(card_payload).to_model(
+            rsa_service=self._rsa
+        )
+        return CardSchema.from_model(
+            self._repository.create(card_model), rsa_service=self._rsa
+        )
+
+    def get_by_id(self, id: str):
+        card_model = self._repository.get_by_id(id)
+        return CardSchema.from_model(card_model, rsa_service=self._rsa)
+
+    def get_all(self):
+        all_cards = self._repository.get_all()
+        return (
+            CardSchema.from_model(card, rsa_service=self._rsa) for card in all_cards
+        )
+
+    def delete(self, id: str):
+        self._repository.delete(self._repository.get_by_id(id))
+        return True

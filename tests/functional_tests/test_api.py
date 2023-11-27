@@ -90,33 +90,6 @@ class TestCardEndpoints:
         assert return_data.status_code == 422
         assert expected_message in return_data.text
 
-    def test_create_card_that_already_exists(self):
-        card_payload = {
-            "exp_date": "02/2056",
-            "holder": "Jon Trigueiro",
-            "number": "4539028025920045",
-            "cvv": "123"
-        }
-
-        # Simulating a first card being added
-        return_data = client.post(
-            url=self.base_endpoint,
-            headers=self.auth_headers,
-            json=card_payload
-        )
-
-        assert return_data.status_code == 201
-
-        # Simulating a first card being added
-        return_data = client.post(
-            url=self.base_endpoint,
-            headers=self.auth_headers,
-            json=card_payload
-        )
-
-        assert return_data.status_code == 400
-        assert return_data.json() == {"error": "A card with this number has been added"}
-
     def test_fetch_card_that_has_been_created(self):
         card_payload = {
             "exp_date": "02/2056",
@@ -174,7 +147,7 @@ class TestCardEndpoints:
 
         assert fetch_return.status_code == 200
         assert type(return_payload) is list
-        assert len(return_payload) == 3  # Cards created on the example above
+        assert len(return_payload) == 2  # Cards created on the example above
 
     def test_delete_card_invalid_id(self):
         fetch_return = client.delete(

@@ -3,11 +3,7 @@ from fastapi.responses import JSONResponse, PlainTextResponse
 from pydantic import ValidationError
 
 from credcrud.auth.handler import require_simple_token
-from credcrud.card.exceptions import (
-    CardAlreadyExistsException,
-    CardNotFoundException,
-    InvalidIDProvided,
-)
+from credcrud.card.exceptions import CardNotFoundException, InvalidIDProvided
 from credcrud.card.schemas import CardPayload, RedactedCardPayload
 from credcrud.card.services import CardService
 from credcrud.database import db_session
@@ -33,11 +29,6 @@ async def create_card(card_payload: CardPayload):
             validation_exception.json(),
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             headers={"Content-Type": "application/json"},
-        )
-
-    except CardAlreadyExistsException as exc:
-        return JSONResponse(
-            {"error": str(exc)}, status_code=status.HTTP_400_BAD_REQUEST
         )
 
 

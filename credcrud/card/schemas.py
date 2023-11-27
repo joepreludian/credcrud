@@ -57,9 +57,6 @@ class Card(BaseModel):
 
     id: Optional[str] = None
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     @model_validator(mode="after")
     def validate(self):
         try:
@@ -92,23 +89,29 @@ class Card(BaseModel):
         )
 
     @classmethod
-    def from_model(cls, card_model: CardModel):
-        return cls(
-            **{
-                "id": str(card_model.id),
-                "card_number": card_model.card_number,
-                "card_holder": card_model.card_holder,
-                "expiration_date": card_model.expiration_date,
-                "cvv": card_model.cvv,
-            }
+    def from_model(cls, card_model: CardModel, rsa_service=None):
+        cls_payload = {
+            "id": str(card_model.id),
+            "card_number": rsa_service.decrypt(card_model.card_number)
+            if rsa_service
+            else card_model.card_number,
+            "card_holder": card_model.card_holder,
+            "expiration_date": card_model.expiration_date,
+            "cvv": card_model.cvv,
+        }
+
+        return cls(**cls_payload)
+
+    def to_model(self, rsa_service=None) -> CardModel:
+        to_model = self.model_dump()
+
+        to_model["card_number"] = (
+            rsa_service.encrypt(to_model["card_number"])
+            if rsa_service
+            else to_model["card_number"]
         )
 
-    def to_model(self) -> CardModel:
-        transformed_data = self.model_dump()
-
-        transformed_data["card_number"] = transformed_data["card_number"]
-
-        return CardModel(**transformed_data)
+        return CardModel(**to_model)
 
     def as_redacted_payload(self) -> RedactedCardPayload:
         """
