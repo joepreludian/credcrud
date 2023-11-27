@@ -32,7 +32,7 @@ Aqui é onde a validação ocorre. Criei três representações do dado do Card 
 * `RedactedCardPayload` -> É herdado de `CardPayload`. Transforma o dado de modo a ocultar dados sensíveis do cartão. Parte-se da premissa que um cartão, depois que ele é adicionado, não necessita de uma visualização dos dados salvo para conferencia. Seguindo boas práticas, exibo apenas os últimos digitos do cartão , por exemplo. Aqui também coloco o campo `brand` se o mesmo for detectado pela library python, assim como seu ID, caso venha do banco de dados.
 
 ### 🟢 Services
-Area onde eu vou conectar os Schemas com os Repositórios. Aqui também que eu farei a injeção da sessão do banco, responsável pela manipulação dos dados.
+Area onde eu vou conectar os Schemas com os Repositórios. Aqui também que eu farei a injeção da sessão do banco, responsável pela manipulação dos dados. Aqui também eu trago o suporte a Criptografia.
 
 ### 🟢 Routes
 As rotas, em Si, onde eu opero a camada de borda do sistema com o mundo real. Ele apenas é um Adaptador do da minha camada de Serviço
@@ -44,6 +44,8 @@ graph TD;
     Models-->Repositories
     Repositories-->Services
     Schemas-->Services
+    RSAService-->RSABuilder
+    RSABuilder-->Services
     Services-->Routes
     Routes-->FastAPI
 
