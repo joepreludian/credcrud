@@ -91,7 +91,7 @@ class RSAService:
         return decrypted_message.decode("utf-8")
 
 
-class KeyStoreService:
+class RSABuilder:
     _rsa: RSAService
 
     def _load_key_from_file(self):
@@ -102,8 +102,7 @@ class KeyStoreService:
         with open(self._key_file, "r") as file_handler:
             return file_handler.write(self._rsa.private_key_as_text)
 
-    @property
-    def rsa_service(self):
+    def get_rsa_service(self):
         return self._rsa
 
     def __init__(self):

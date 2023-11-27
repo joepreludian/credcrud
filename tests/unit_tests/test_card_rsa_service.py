@@ -1,10 +1,12 @@
-from credcrud.card.services import RSAService, KeyStoreService
-import pytest
-from unittest import mock
 import os
+from unittest import mock
+
+import pytest
+
+from credcrud.card.services import RSABuilder, RSAService
 
 
-class TestKeyRepository:
+class TestRSABuilder:
     @staticmethod
     def setup_method(cls):
         os.environ['RSA_KEY_PASSWORD'] = "MYPASSWORD"
@@ -14,8 +16,8 @@ class TestKeyRepository:
     ))
     def test_get_rsa_service_from_first_time(self, key_file_exists, rsa_private_key_as_text_1024):
         with mock.patch("builtins.open", mock.mock_open(read_data=rsa_private_key_as_text_1024)), mock.patch("os.path.isfile", return_value=key_file_exists):
-            kr = KeyStoreService()
-            assert type(kr.rsa_service) is RSAService
+            kr = RSABuilder()
+            assert type(kr.get_rsa_service()) is RSAService
 
 
 class TestRSAService:
