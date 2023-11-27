@@ -1,6 +1,8 @@
 # 💳 CredCrud
 ## Microsserviço de cadastro de cartões de crédito simples - pun intended 😅
 [![codecov](https://codecov.io/gh/joepreludian/credcrud/graph/badge.svg?token=2KFE4MKR9X)](https://codecov.io/gh/joepreludian/credcrud)
+![CICD](https://github.com/joepreludian/credcrud/actions/workflows/ci.yaml/badge.svg)
+
 
 Este projeto será montado apenas para fins de estudo. O mesmo trabalhará em cima do FastAPI e utilizando boas práticas.
 

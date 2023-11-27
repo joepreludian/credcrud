@@ -12,7 +12,6 @@ card_router.db_session = db_session
 
 client = TestClient(app)
 
-
 class TestCardEndpoints:
 
     base_endpoint = "/v1/credit-card"
