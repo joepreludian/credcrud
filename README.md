@@ -75,6 +75,8 @@ Como referencia, criei um arquivo de exemplo de requisições para que voce poss
 
 Caso queira voce pode também consultar o Swagger gerado pelo projeto. Antes fique ciente das limitações na seção "Tradeoffs" desse documento antes de consumir este. http://127.0.0.1:8765/docs
 
+**💡Dica**: Para gerar números de cartão de crédito validos voce pode usar um gerador online: https://www.creditcardvalidator.org/generator
+
 ## 🧯 Testando o projeto
 Esse software foi concebido utilizando boas práticas de código com foco no desenvolvimento de testes desde sua concepção. A estratégia foi simples: ao passo que eu projetava a funcionalidade, já codificava um teste para validar se o código estava se comportando corretamente. Como um extra, adicionei cobertura de testes para o processo, o que viabilizou entender corretamente as áreas que eu precisava cobrir. O mapa da cobertura de testes está apresentada abaixo:
 
