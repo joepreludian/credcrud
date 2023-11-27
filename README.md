@@ -7,32 +7,32 @@ Este projeto será montado apenas para fins de estudo. O mesmo trabalhará em ci
 ## 🧭 Requisitos técnicos
 * Será necessário cadastrar os dados do cartão;
 * Faz-se necessário a utilização da biblioteca [MaisTodos/python-creditcard]( https://github.com/MaisTodos/python-creditcard) para a validação da numeração do cartão;
-  * Vale ressaltar que se faz necessário a configuração dos outros dados, como data de expiração, CVV, etc;
+  * Vale ressaltar que é necessário configurar os demais dados, tais como a data de expiração, o CVV, entre outros;
 * O dado da numeração do cartão precisa estar criptografado;
 * A API precisa estar protegida por meio de credenciais.
 
 # 🛠️ Estratégia de trabalho
-Para o desafio acima proposto, será adotado o microframework FastAPI e como persistencia de dados será utilizado SQLAlchemy com Alembic. Como possuo pouco tempo disponível para o projeto, tentarei fazer tradeoffs de modo a não ter prejuízo no desenvolvimento.
+Para o desafio acima proposto, será adotado o microframework FastAPI e como persistência de dados será utilizado SQLAlchemy com Alembic. Como possuo pouco tempo disponível para o projeto, tentarei fazer tradeoffs de modo a não ter prejuízo no desenvolvimento.
 
-Criei [um arquivo de log](CHANGELOG.md) onde eu descreverei o conjunto de ações tomadas de modo a chegar no objetivo final.
+Criei [um arquivo de log](CHANGELOG.md) onde eu descreverei o conjunto de ações tomadas para alcançar o objetivo final.
 
 ## 🧪 Execução
-Para o desafio proposto me dispus de uma arquitetura multi-camada onde eu conseguia controlar a aplicação encapsulada em classes que me permitiam controlar certos aspectos da lógica de negócio. Por exemplo, estruturei a aplicação em algumas estruturas abaixo descritas:
+Para o desafio proposto me dispus de uma arquitetura multi-camada, onde eu conseguia controlar a aplicação encapsulada em classes que me permitiam controlar certos aspectos da lógica de negócio. Por exemplo, organizei a aplicação em algumas estruturas descritas a seguir:
 
 ### 🟢 Models
-Entidade do SQLAlchemy onde eu armazenaria o dado no banco de dados
+Entidade do SQLAlchemy onde eu armazenaria o dado no banco de dados.
 
 ### 🟢 Repositories
-Classe responsável por manipular o SQLAlchemy; Seria como os `managers` do Django. Aqui é onde eu posso solicitar um Card By ID, ou criar um card, etc etc.
+Classe responsável por manipular o SQLAlchemy; seria como os `managers` do Django. Aqui é onde eu posso solicitar um Card By ID, ou criar um card, etc.
 
 ### 🟢 Schemas
-Aqui é onde a validação ocorre. Criei três representações do dado do Card que são as portas com a camada de serviço e o mundo externo. Basicamente temos 3 classes principais
-* `Card` -> Classe principal, *source of truth*, onde eu crio o objeto do `Card` em si. Transforma o campo data de vencimento em um objeto datetime, e possui métodos para interpretar dados vindos do Model do SQLAlchemy, assim como os modelos a seguir.
-* `CardPayload` -> É o tipo de dado que eu espero receber quando crio um novo card. Virá no formato descrito abaixo e visa realizar checagens prévias, como a data de vencimento do cartão para evitar cadastrar um cartão vencido.
-* `RedactedCardPayload` -> É herdado de `CardPayload`. Transforma o dado de modo a ocultar dados sensíveis do cartão. Parte-se da premissa que um cartão, depois que ele é adicionado, não necessita de uma visualização dos dados salvo para conferencia. Seguindo boas práticas, exibo apenas os últimos digitos do cartão , por exemplo. Aqui também coloco o campo `brand` se o mesmo for detectado pela library python, assim como seu ID, caso venha do banco de dados.
+Aqui é onde a validação ocorre. Criei três representações do dado do Card que conectam a camada de serviço e o mundo externo. Basicamente temos 3 classes principais:
+* `Card` -> Classe principal, *source of truth*, onde eu crio o objeto do `Card` em si. Transforma o campo "data de vencimento" em um objeto "date", e possui métodos para interpretar dados vindos do Model do SQLAlchemy, assim como os modelos a seguir.
+* `CardPayload` -> É o tipo de dado que eu espero receber ao criar um *Card*. Ele virá no formato descrito abaixo, visando realizar checagens prévias, como a data de vencimento do cartão, para evitar cadastrar um cartão vencido.
+* `RedactedCardPayload` -> É herdado de `CardPayload`. Transforma o dado de modo a ocultar dados sensíveis do cartão. Parte-se da premissa que um cartão, depois que ele é adicionado, não necessita de uma visualização dos dados salvo para conferência. Seguindo boas práticas, exibo apenas os últimos digitos do cartão , por exemplo. Aqui também coloco o campo `brand` se o mesmo for detectado pela library python, assim como seu ID, caso venha do banco de dados.
 
 ### 🟢 Services
-Area onde eu vou conectar os Schemas com os Repositórios. Aqui também que eu farei a injeção da sessão do banco, responsável pela manipulação dos dados. Aqui também eu trago o suporte a Criptografia.
+Área onde eu vou conectar os Schemas com os Repositórios. Aqui também que realizarei a injeção da sessão do banco, responsável pela manipulação dos dados. Aqui também eu trago o suporte a Criptografia de maneira a ser acoplável.
 
 ### 🟢 Routes
 As rotas, em Si, onde eu opero a camada de borda do sistema com o mundo real. Ele apenas é um Adaptador do da minha camada de Serviço
